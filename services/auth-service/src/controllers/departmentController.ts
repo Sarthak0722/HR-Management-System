@@ -116,7 +116,7 @@ export const getDepartmentById = asyncHandler(async (req: Request, res: Response
   });
 
   if (!department) {
-    throw createError('Department not found', 404);
+    throw createError(404, 'Department not found');
   }
 
   res.json({
@@ -135,17 +135,17 @@ export const createDepartment = asyncHandler(async (req: AuthenticatedRequest, r
   });
 
   if (existingDepartment) {
-    throw createError('Department with this name already exists', 400);
+    throw createError(400, 'Department with this name already exists');
   }
 
   // Validate manager if provided
-  if (data.managerId) {
+  if (data.managerId && data.managerId.trim() !== '') {
     const manager = await prisma.employeeProfile.findUnique({
       where: { id: data.managerId },
     });
 
     if (!manager) {
-      throw createError('Manager not found', 404);
+      throw createError(404, 'Manager not found');
     }
   }
 
@@ -153,7 +153,7 @@ export const createDepartment = asyncHandler(async (req: AuthenticatedRequest, r
     data: {
       name: data.name,
       description: data.description,
-      managerId: data.managerId,
+      managerId: data.managerId && data.managerId.trim() !== '' ? data.managerId : null,
     },
     include: {
       manager: {
@@ -196,7 +196,7 @@ export const updateDepartment = asyncHandler(async (req: AuthenticatedRequest, r
   });
 
   if (!existingDepartment) {
-    throw createError('Department not found', 404);
+    throw createError(404, 'Department not found');
   }
 
   // Check if new name conflicts with existing departments
@@ -209,7 +209,7 @@ export const updateDepartment = asyncHandler(async (req: AuthenticatedRequest, r
     });
 
     if (nameConflict) {
-      throw createError('Department with this name already exists', 400);
+      throw createError(400, 'Department with this name already exists');
     }
   }
 
@@ -220,7 +220,7 @@ export const updateDepartment = asyncHandler(async (req: AuthenticatedRequest, r
     });
 
     if (!manager) {
-      throw createError('Manager not found', 404);
+      throw createError(404, 'Manager not found');
     }
   }
 
@@ -279,16 +279,16 @@ export const deleteDepartment = asyncHandler(async (req: AuthenticatedRequest, r
   });
 
   if (!department) {
-    throw createError('Department not found', 404);
+    throw createError(404, 'Department not found');
   }
 
   // Check if department has employees or positions
   if (department._count.employees > 0) {
-    throw createError('Cannot delete department with employees. Please reassign employees first.', 400);
+    throw createError(400, 'Cannot delete department with employees. Please reassign employees first.');
   }
 
   if (department._count.positions > 0) {
-    throw createError('Cannot delete department with positions. Please delete positions first.', 400);
+    throw createError(400, 'Cannot delete department with positions. Please delete positions first.');
   }
 
   await prisma.department.delete({

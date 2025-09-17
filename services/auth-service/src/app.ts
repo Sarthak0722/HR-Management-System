@@ -10,6 +10,12 @@ import authRoutes from './routes/authRoutes';
 import notificationRoutes from './routes/notificationRoutes';
 import departmentRoutes from './routes/departmentRoutes';
 import leaveRoutes from './routes/leaveRoutes';
+import payrollRoutes from './routes/payrollRoutes';
+import performanceRoutes from './routes/performanceRoutes';
+import trainingRoutes from './routes/trainingRoutes';
+import documentRoutes from './routes/documentRoutes';
+import recruitmentRoutes from './routes/recruitmentRoutes';
+import leaveBalanceRoutes from './routes/leaveBalanceRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import logger from './utils/logger';
 
@@ -83,6 +89,12 @@ app.use('/auth', authRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/departments', departmentRoutes);
 app.use('/leaves', leaveRoutes);
+app.use('/payroll', payrollRoutes);
+app.use('/performance', performanceRoutes);
+app.use('/training', trainingRoutes);
+app.use('/documents', documentRoutes);
+app.use('/recruitment', recruitmentRoutes);
+app.use('/leave-balances', leaveBalanceRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

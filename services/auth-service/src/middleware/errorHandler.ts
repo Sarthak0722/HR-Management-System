@@ -33,7 +33,7 @@ export const errorHandler = (
   });
 };
 
-export const createError = (message: string, statusCode: number = 500): AppError => {
+export const createError = (statusCode: number, message: string): AppError => {
   const error: AppError = new Error(message);
   error.statusCode = statusCode;
   error.isOperational = true;

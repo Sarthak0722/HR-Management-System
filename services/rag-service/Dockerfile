@@ -9,13 +9,13 @@ RUN npm install -g pnpm
 COPY package*.json ./
 
 # Install dependencies
-RUN pnpm install --no-frozen-lockfile --include=dev
+RUN npm install
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN pnpm build
+RUN npm run build
 
 # Create logs directory
 RUN mkdir -p logs

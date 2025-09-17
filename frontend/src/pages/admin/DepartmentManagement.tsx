@@ -19,6 +19,7 @@ const DepartmentManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
+  const [employees, setEmployees] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -27,6 +28,7 @@ const DepartmentManagement: React.FC = () => {
 
   useEffect(() => {
     fetchDepartments();
+    fetchEmployees();
   }, []);
 
   const fetchDepartments = async () => {
@@ -39,6 +41,15 @@ const DepartmentManagement: React.FC = () => {
       toast.error('Failed to fetch departments');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchEmployees = async () => {
+    try {
+      const response = await api.hr.getEmployees(1, 100);
+      setEmployees(response.data.employees || []);
+    } catch (error) {
+      console.error('Failed to fetch employees:', error);
     }
   };
 
@@ -271,10 +282,12 @@ const DepartmentManagement: React.FC = () => {
                     value={formData.managerId}
                     onChange={(e) => setFormData({ ...formData, managerId: e.target.value })}
                   >
-                    <option value="">Select Manager</option>
-                    {/* TODO: Load managers from API */}
-                    <option value="1">John Smith</option>
-                    <option value="2">Jane Doe</option>
+                    <option value="">Select Manager (Optional)</option>
+                    {employees.map((employee) => (
+                      <option key={employee.id} value={employee.id}>
+                        {employee.firstName} {employee.lastName} - {employee.position || 'No Position'}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex justify-end space-x-3 pt-4">

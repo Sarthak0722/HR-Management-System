@@ -47,7 +47,7 @@ export const markAsRead = asyncHandler(async (req: AuthenticatedRequest, res: Re
   });
 
   if (!notification) {
-    throw createError('Notification not found', 404);
+    throw createError(404, 'Notification not found');
   }
 
   await prisma.notification.update({
@@ -125,7 +125,7 @@ export const deleteNotification = asyncHandler(async (req: AuthenticatedRequest,
   });
 
   if (!notification) {
-    throw createError('Notification not found', 404);
+    throw createError(404, 'Notification not found');
   }
 
   await prisma.notification.delete({

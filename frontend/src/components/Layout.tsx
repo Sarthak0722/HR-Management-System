@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import api from '../utils/api';
-import { LogOut, User, Users, Calendar, HelpCircle, Home, Settings, Building2, BarChart3, Bell } from 'lucide-react';
+import { LogOut, User, Users, Calendar, HelpCircle, Home, Settings, Building2, BarChart3, Bell, DollarSign, Target, BookOpen } from 'lucide-react';
 import NotificationCenter from './NotificationCenter';
 
 interface LayoutProps {
@@ -54,11 +54,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     ...(user?.role === 'ADMIN' ? [
       { name: 'User Management', href: '/admin/users', icon: Users },
       { name: 'Departments', href: '/admin/departments', icon: Building2 },
+      { name: 'Payroll', href: '/admin/payroll', icon: DollarSign },
+      { name: 'Performance', href: '/admin/performance', icon: Target },
+      { name: 'Training', href: '/admin/training', icon: BookOpen },
       { name: 'System Settings', href: '/admin/settings', icon: Settings },
       { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
     ] : user?.role === 'HR' ? [
       { name: 'Employees', href: '/hr/employees', icon: Users },
       { name: 'Leave Requests', href: '/hr/leaves', icon: Calendar },
+      { name: 'Payroll', href: '/hr/payroll', icon: DollarSign },
+      { name: 'Performance', href: '/hr/performance', icon: Target },
+      { name: 'Training', href: '/hr/training', icon: BookOpen },
     ] : [
       { name: 'My Profile', href: '/employee/profile', icon: User },
       { name: 'My Leaves', href: '/employee/leaves', icon: Calendar },

@@ -25,11 +25,11 @@ export const createLeaveRequest = asyncHandler(async (req: AuthenticatedRequest,
 
   // Validate dates
   if (data.startDate >= data.endDate) {
-    throw createError('End date must be after start date', 400);
+    throw createError(400, 'End date must be after start date');
   }
 
   if (data.startDate < new Date()) {
-    throw createError('Cannot create leave request for past dates', 400);
+    throw createError(400, 'Cannot create leave request for past dates');
   }
 
   // Check for overlapping leave requests
@@ -47,7 +47,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthenticatedRequest,
   });
 
   if (overlappingLeave) {
-    throw createError('You already have a leave request for this period', 400);
+    throw createError(400, 'You already have a leave request for this period');
   }
 
   const leaveRequest = await prisma.leave.create({
@@ -197,11 +197,11 @@ export const updateLeaveStatus = asyncHandler(async (req: AuthenticatedRequest, 
   });
 
   if (!leaveRequest) {
-    throw createError('Leave request not found', 404);
+    throw createError(404, 'Leave request not found');
   }
 
   if (leaveRequest.status !== 'PENDING') {
-    throw createError('Leave request has already been processed', 400);
+    throw createError(400, 'Leave request has already been processed');
   }
 
   const updatedLeave = await prisma.leave.update({
@@ -282,11 +282,11 @@ export const deleteLeaveRequest = asyncHandler(async (req: AuthenticatedRequest,
   });
 
   if (!leaveRequest) {
-    throw createError('Leave request not found', 404);
+    throw createError(404, 'Leave request not found');
   }
 
   if (leaveRequest.status !== 'PENDING') {
-    throw createError('Cannot delete processed leave request', 400);
+    throw createError(400, 'Cannot delete processed leave request');
   }
 
   await prisma.leave.delete({

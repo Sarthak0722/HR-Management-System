@@ -39,7 +39,8 @@ export const authenticateToken = async (
     req.user = {
       userId: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
+      id: user.id
     };
 
     next();
@@ -65,6 +66,7 @@ export const requireRole = (roles: UserRole[]) => {
   };
 };
 
+export const requireAuth = authenticateToken;
 export const requireHR = requireRole([UserRole.HR]);
 export const requireEmployee = requireRole([UserRole.EMPLOYEE]);
 export const requireAdmin = requireRole([UserRole.ADMIN]);

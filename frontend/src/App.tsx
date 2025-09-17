@@ -11,10 +11,16 @@ import QA from './pages/QA';
 import UserManagement from './pages/admin/UserManagement';
 import DepartmentManagement from './pages/admin/DepartmentManagement';
 import SystemSettings from './pages/admin/SystemSettings';
+import PayrollManagement from './pages/admin/PayrollManagement';
+import PerformanceManagement from './pages/admin/PerformanceManagement';
+import TrainingManagement from './pages/admin/TrainingManagement';
 import Profile from './pages/employee/Profile';
 import EmployeeLeaves from './pages/employee/Leaves';
 import Employees from './pages/hr/Employees';
 import HRLeaves from './pages/hr/Leaves';
+import HRPayroll from './pages/hr/Payroll';
+import HRPerformance from './pages/hr/Performance';
+import HRTraining from './pages/hr/Training';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -149,6 +155,42 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/hr/payroll"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['HR', 'ADMIN']}>
+                  <Layout>
+                    <HRPayroll />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hr/performance"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['HR', 'ADMIN']}>
+                  <Layout>
+                    <HRPerformance />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hr/training"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['HR', 'ADMIN']}>
+                  <Layout>
+                    <HRTraining />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
 
           {/* Employee Routes */}
           <Route
@@ -204,6 +246,42 @@ const App: React.FC = () => {
                 <RoleRoute allowedRoles={['ADMIN']}>
                   <Layout>
                     <SystemSettings />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/payroll"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['ADMIN']}>
+                  <Layout>
+                    <PayrollManagement />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/performance"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['ADMIN']}>
+                  <Layout>
+                    <PerformanceManagement />
+                  </Layout>
+                </RoleRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/training"
+            element={
+              <ProtectedRoute>
+                <RoleRoute allowedRoles={['ADMIN']}>
+                  <Layout>
+                    <TrainingManagement />
                   </Layout>
                 </RoleRoute>
               </ProtectedRoute>

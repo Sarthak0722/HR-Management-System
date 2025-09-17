@@ -233,6 +233,151 @@ class ApiClient {
         this.ragClient.get('/qa/stats'),
     };
   }
+
+  // Payroll API
+  get payroll() {
+    return {
+      create: (data: any) => this.authClient.post('/payroll', data),
+      getAll: (page = 1, limit = 10, month?: number, year?: number) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (month) params.append('month', month.toString());
+        if (year) params.append('year', year.toString());
+        return this.authClient.get(`/payroll?${params}`);
+      },
+      getById: (id: string) => this.authClient.get(`/payroll/${id}`),
+      update: (id: string, data: any) => this.authClient.put(`/payroll/${id}`, data),
+      process: (id: string) => this.authClient.post(`/payroll/${id}/process`),
+      getStats: (year?: number) => {
+        const params = year ? `?year=${year}` : '';
+        return this.authClient.get(`/payroll/stats${params}`);
+      },
+    };
+  }
+
+  // Performance API
+  get performance() {
+    return {
+      createReview: (data: any) => this.authClient.post('/performance/reviews', data),
+      getReviews: (page = 1, limit = 10, userId?: string, reviewerId?: string) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (userId) params.append('userId', userId);
+        if (reviewerId) params.append('reviewerId', reviewerId);
+        return this.authClient.get(`/performance/reviews?${params}`);
+      },
+      getReviewById: (id: string) => this.authClient.get(`/performance/reviews/${id}`),
+      updateReview: (id: string, data: any) => this.authClient.put(`/performance/reviews/${id}`, data),
+      createGoal: (data: any) => this.authClient.post('/performance/goals', data),
+      getGoals: (page = 1, limit = 10, userId?: string, status?: string) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (userId) params.append('userId', userId);
+        if (status) params.append('status', status);
+        return this.authClient.get(`/performance/goals?${params}`);
+      },
+      updateGoal: (id: string, data: any) => this.authClient.put(`/performance/goals/${id}`, data),
+      getStats: (year?: number) => {
+        const params = year ? `?year=${year}` : '';
+        return this.authClient.get(`/performance/stats${params}`);
+      },
+    };
+  }
+
+  // Training API
+  get training() {
+    return {
+      createProgram: (data: any) => this.authClient.post('/training/programs', data),
+      getPrograms: (page = 1, limit = 10, isActive?: boolean) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (isActive !== undefined) params.append('isActive', isActive.toString());
+        return this.authClient.get(`/training/programs?${params}`);
+      },
+      getProgramById: (id: string) => this.authClient.get(`/training/programs/${id}`),
+      updateProgram: (id: string, data: any) => this.authClient.put(`/training/programs/${id}`, data),
+      deleteProgram: (id: string) => this.authClient.delete(`/training/programs/${id}`),
+      enroll: (data: any) => this.authClient.post('/training/enroll', data),
+      getEnrollments: (page = 1, limit = 10, userId?: string, status?: string) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (userId) params.append('userId', userId);
+        if (status) params.append('status', status);
+        return this.authClient.get(`/training/enrollments?${params}`);
+      },
+      updateEnrollment: (id: string, data: any) => this.authClient.put(`/training/enrollments/${id}`, data),
+      getStats: () => this.authClient.get('/training/stats'),
+    };
+  }
+
+  // Documents API
+  get documents() {
+    return {
+      upload: (formData: FormData) => this.authClient.post('/documents/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
+      getAll: (page = 1, limit = 10, userId?: string, type?: string, isPublic?: boolean) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (userId) params.append('userId', userId);
+        if (type) params.append('type', type);
+        if (isPublic !== undefined) params.append('isPublic', isPublic.toString());
+        return this.authClient.get(`/documents?${params}`);
+      },
+      getById: (id: string) => this.authClient.get(`/documents/${id}`),
+      download: (id: string) => this.authClient.get(`/documents/${id}/download`, { responseType: 'blob' }),
+      update: (id: string, data: any) => this.authClient.put(`/documents/${id}`, data),
+      delete: (id: string) => this.authClient.delete(`/documents/${id}`),
+      getStats: () => this.authClient.get('/documents/stats'),
+    };
+  }
+
+  // Recruitment API
+  get recruitment() {
+    return {
+      createJob: (data: any) => this.authClient.post('/recruitment/jobs', data),
+      getJobs: (page = 1, limit = 10, status?: string, departmentId?: string, employmentType?: string) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (status) params.append('status', status);
+        if (departmentId) params.append('departmentId', departmentId);
+        if (employmentType) params.append('employmentType', employmentType);
+        return this.authClient.get(`/recruitment/jobs?${params}`);
+      },
+      getJobById: (id: string) => this.authClient.get(`/recruitment/jobs/${id}`),
+      updateJob: (id: string, data: any) => this.authClient.put(`/recruitment/jobs/${id}`, data),
+      deleteJob: (id: string) => this.authClient.delete(`/recruitment/jobs/${id}`),
+      applyForJob: (data: any) => this.authClient.post('/recruitment/applications', data),
+      getApplications: (page = 1, limit = 10, jobPostingId?: string, status?: string) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (jobPostingId) params.append('jobPostingId', jobPostingId);
+        if (status) params.append('status', status);
+        return this.authClient.get(`/recruitment/applications?${params}`);
+      },
+      updateApplication: (id: string, data: any) => this.authClient.put(`/recruitment/applications/${id}`, data),
+      getStats: () => this.authClient.get('/recruitment/stats'),
+    };
+  }
+
+  // Leave Balances API
+  get leaveBalances() {
+    return {
+      create: (data: any) => this.authClient.post('/leave-balances', data),
+      getAll: (page = 1, limit = 10, userId?: string, leaveType?: string, year?: number) => {
+        const params = new URLSearchParams({ page: page.toString(), limit: limit.toString() });
+        if (userId) params.append('userId', userId);
+        if (leaveType) params.append('leaveType', leaveType);
+        if (year) params.append('year', year.toString());
+        return this.authClient.get(`/leave-balances?${params}`);
+      },
+      getById: (id: string) => this.authClient.get(`/leave-balances/${id}`),
+      update: (id: string, data: any) => this.authClient.put(`/leave-balances/${id}`, data),
+      getUserBalances: (userId: string, year?: number) => {
+        const params = year ? `?year=${year}` : '';
+        return this.authClient.get(`/leave-balances/user/${userId}${params}`);
+      },
+      updateUsage: (userId: string, leaveType: string, year: number, days: number) => 
+        this.authClient.put(`/leave-balances/usage/${userId}/${leaveType}/${year}`, { days }),
+      reset: (year: number) => this.authClient.post(`/leave-balances/reset/${year}`),
+      getStats: (year?: number) => {
+        const params = year ? `?year=${year}` : '';
+        return this.authClient.get(`/leave-balances/stats${params}`);
+      },
+    };
+  }
 }
 
 export const api = new ApiClient();

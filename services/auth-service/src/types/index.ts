@@ -4,6 +4,7 @@ export interface JWTPayload {
   userId: string;
   email: string;
   role: UserRole;
+  id: string;
 }
 
 export interface LoginRequest {

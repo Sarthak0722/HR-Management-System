@@ -98,7 +98,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw createError('Invalid credentials', 401);
+    throw createError(401, 'Invalid credentials');
   }
 
   const token = jwt.sign(
@@ -142,7 +142,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (existingUser) {
-    throw createError('User already exists', 400);
+    throw createError(400, 'User already exists');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -245,7 +245,7 @@ export const createEmployee = asyncHandler(async (req: AuthenticatedRequest, res
   });
 
   if (existingUser) {
-    throw createError('User already exists', 400);
+    throw createError(400, 'User already exists');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -351,7 +351,7 @@ export const getProfile = asyncHandler(async (req: AuthenticatedRequest, res: Re
   });
 
   if (!user) {
-    throw createError('User not found', 404);
+    throw createError(404, 'User not found');
   }
 
   res.json({

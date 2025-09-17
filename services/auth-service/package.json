@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "@types/multer": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -24,6 +25,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^2.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0",
@@ -43,5 +45,8 @@
     "prisma": "^5.7.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
