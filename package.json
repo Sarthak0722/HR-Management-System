@@ -1,0 +1,32 @@
+{
+  "name": "hrms-monorepo",
+  "version": "1.0.0",
+  "description": "HR Management System with Microservices Architecture",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter auth-service dev\" \"pnpm --filter hr-service dev\" \"pnpm --filter employee-service dev\" \"pnpm --filter rag-service dev\" \"pnpm --filter frontend dev\"",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "db:migrate": "pnpm --filter auth-service db:migrate"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  HR
+  EMPLOYEE
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LeaveType {
+  SICK_LEAVE
+  VACATION
+  PERSONAL_LEAVE
+  MATERNITY_LEAVE
+  PATERNITY_LEAVE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      UserRole @default(EMPLOYEE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  employeeProfile EmployeeProfile?
+  leaveRequests   Leave[]
+  attendance      Attendance[]
+  notifications   Notification[]
+
+  @@map("users")
+}
+
+model EmployeeProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  firstName    String
+  lastName     String
+  phone        String?
+  address      String?
+  departmentId String?
+  positionId   String?
+  salary       Float?
+  hireDate     DateTime?
+  employeeId   String?  @unique
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department  Department? @relation(fields: [departmentId], references: [id])
+  position    Position?   @relation(fields: [positionId], references: [id])
+  managedDept Department? @relation("DepartmentManager")
+
+  @@map("employee_profiles")
+}
+
+model Leave {
+  id          String      @id @default(cuid())
+  userId      String
+  type        LeaveType
+  startDate   DateTime
+  endDate     DateTime
+  reason      String?
+  status      LeaveStatus @default(PENDING)
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("leaves")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  managerId   String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  employees  EmployeeProfile[]
+  manager    EmployeeProfile? @relation("DepartmentManager", fields: [managerId], references: [id])
+  positions  Position[]
+
+  @@map("departments")
+}
+
+model Position {
+  id          String   @id @default(cuid())
+  title       String
+  departmentId String
+  description String?
+  minSalary   Float?
+  maxSalary   Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  department Department @relation(fields: [departmentId], references: [id])
+  employees  EmployeeProfile[]
+
+  @@map("positions")
+}
+
+model Attendance {
+  id         String    @id @default(cuid())
+  userId     String
+  date       DateTime
+  checkIn    DateTime?
+  checkOut   DateTime?
+  totalHours Float?
+  status     AttendanceStatus @default(PRESENT)
+  notes      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("attendance")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model CompanySettings {
+  id                String   @id @default(cuid())
+  companyName       String
+  companyEmail      String
+  companyPhone      String?
+  companyAddress    String?
+  workingHoursStart String   @default("09:00")
+  workingHoursEnd   String   @default("17:00")
+  workingDays       String[] @default(["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"])
+  leavePolicy       Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("company_settings")
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+  WORK_FROM_HOME
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  SUCCESS
+  ERROR
+  LEAVE_APPROVAL
+  LEAVE_REJECTION
+  ATTENDANCE_REMINDER
+}

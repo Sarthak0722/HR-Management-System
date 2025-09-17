@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: hrms-postgres
+    environment:
+      POSTGRES_DB: hrms
+      POSTGRES_USER: hrms_user
+      POSTGRES_PASSWORD: hrms_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - hrms-network
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: hrms-auth-service
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://hrms_user:hrms_password@postgres:5432/hrms
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    networks:
+      - hrms-network
+    volumes:
+      - ./services/auth-service:/app
+      - /app/node_modules
+
+  hr-service:
+    build:
+      context: ./services/hr-service
+      dockerfile: Dockerfile
+    container_name: hrms-hr-service
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      DATABASE_URL: postgresql://hrms_user:hrms_password@postgres:5432/hrms
+      AUTH_SERVICE_URL: http://auth-service:3001
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+      - auth-service
+    networks:
+      - hrms-network
+    volumes:
+      - ./services/hr-service:/app
+      - /app/node_modules
+
+  employee-service:
+    build:
+      context: ./services/employee-service
+      dockerfile: Dockerfile
+    container_name: hrms-employee-service
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      DATABASE_URL: postgresql://hrms_user:hrms_password@postgres:5432/hrms
+      AUTH_SERVICE_URL: http://auth-service:3001
+    ports:
+      - "3003:3003"
+    depends_on:
+      - postgres
+      - auth-service
+    networks:
+      - hrms-network
+    volumes:
+      - ./services/employee-service:/app
+      - /app/node_modules
+
+  rag-service:
+    build:
+      context: ./services/rag-service
+      dockerfile: Dockerfile
+    container_name: hrms-rag-service
+    environment:
+      NODE_ENV: development
+      PORT: 3004
+      GROQ_API_KEY: your-groq-api-key
+    ports:
+      - "3004:3004"
+    networks:
+      - hrms-network
+    volumes:
+      - ./services/rag-service:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hrms-frontend
+    environment:
+      REACT_APP_AUTH_SERVICE_URL: http://localhost:3001
+      REACT_APP_HR_SERVICE_URL: http://localhost:3002
+      REACT_APP_EMPLOYEE_SERVICE_URL: http://localhost:3003
+      REACT_APP_RAG_SERVICE_URL: http://localhost:3004
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - hr-service
+      - employee-service
+      - rag-service
+    networks:
+      - hrms-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+
+networks:
+  hrms-network:
+    driver: bridge

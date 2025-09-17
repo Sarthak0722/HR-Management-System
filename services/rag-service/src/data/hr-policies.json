@@ -1,0 +1,62 @@
+[
+  {
+    "id": "policy-001",
+    "title": "Leave Policy",
+    "content": "Employees are entitled to 20 days of annual leave per year. Leave requests must be submitted at least 2 weeks in advance for planned leave. Sick leave can be taken with a doctor's note. Maternity leave is 12 weeks paid, paternity leave is 2 weeks paid. Emergency leave can be taken with manager approval.",
+    "category": "Leave Management"
+  },
+  {
+    "id": "policy-002",
+    "title": "Work Hours and Attendance",
+    "content": "Standard work hours are 9 AM to 5 PM, Monday to Friday. Flexible working hours are available with manager approval. Remote work is allowed up to 2 days per week. Tardiness should not exceed 15 minutes without prior notice. Overtime must be pre-approved by supervisor.",
+    "category": "Work Schedule"
+  },
+  {
+    "id": "policy-003",
+    "title": "Code of Conduct",
+    "content": "All employees must maintain professional behavior. Harassment, discrimination, or any form of inappropriate conduct is strictly prohibited. Employees should respect diversity and inclusion. Confidential information must be protected. Conflicts of interest must be disclosed to HR.",
+    "category": "Behavioral Standards"
+  },
+  {
+    "id": "policy-004",
+    "title": "Performance Management",
+    "content": "Performance reviews are conducted annually. Goals are set at the beginning of each year. Regular feedback sessions occur quarterly. Performance improvement plans are available for underperforming employees. Recognition programs reward outstanding performance.",
+    "category": "Performance"
+  },
+  {
+    "id": "policy-005",
+    "title": "Benefits and Compensation",
+    "content": "Health insurance covers 80% of medical expenses. Dental and vision coverage is included. 401k matching up to 6% of salary. Life insurance coverage is 2x annual salary. Professional development budget of $2000 per year per employee.",
+    "category": "Benefits"
+  },
+  {
+    "id": "policy-006",
+    "title": "IT and Security",
+    "content": "Company devices must be used for work purposes only. Personal devices on company network must be approved by IT. Passwords must be changed every 90 days. Two-factor authentication is mandatory for all systems. Data backup is performed daily.",
+    "category": "Technology"
+  },
+  {
+    "id": "policy-007",
+    "title": "Dress Code",
+    "content": "Business casual attire is required Monday to Thursday. Casual Friday allows jeans and company t-shirts. Client meetings require business formal attire. Remote work allows casual dress. Company logo wear is encouraged for team events.",
+    "category": "Appearance"
+  },
+  {
+    "id": "policy-008",
+    "title": "Training and Development",
+    "content": "New employees receive 2-week orientation program. Mandatory safety training annually. Professional development courses are available online. Conference attendance requires manager approval. Tuition reimbursement up to $5000 per year.",
+    "category": "Learning"
+  },
+  {
+    "id": "policy-009",
+    "title": "Termination and Resignation",
+    "content": "Two weeks notice is required for resignation. Exit interviews are mandatory. Company property must be returned. Final paycheck includes unused vacation days. Non-compete clause applies for 6 months after termination.",
+    "category": "Employment End"
+  },
+  {
+    "id": "policy-010",
+    "title": "Health and Safety",
+    "content": "Workplace safety is everyone's responsibility. Report accidents immediately to supervisor. Emergency procedures are posted in all areas. First aid kits are available on each floor. Fire drills are conducted quarterly. Mental health support is available through EAP.",
+    "category": "Safety"
+  }
+]
